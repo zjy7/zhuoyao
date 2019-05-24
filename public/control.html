@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>AAA</title>
+    </head>
+    <body>
+        <div>
+            <label for="latitude">latitude</label>
+            <input type="text" id="latitude" />
+        </div>
+        <div>
+            <label for="longitude">longitude</label>
+            <input type="text" id="longitude" />
+        </div>
+        <script>
+            window.onload = () => {
+                let controlLock = true
+                const latEl = document.getElementById('latitude')
+                const lonEl = document.getElementById('longitude')
+                let lat = 0
+                let lon = 0
+                let offset = []
+
+                showPosition = position => {
+                    lat = Number(position.coords.latitude).toFixed(6)
+                    lon = Number(position.coords.longitude).toFixed(6)
+                    console.log('纬度:' + lat + ',经度:' + lon)
+
+                    latEl.value = lat
+                    lonEl.value = lon
+                }
+                navigator.geolocation.getCurrentPosition(this.showPosition)
+
+                window.addEventListener('keydown', e => {
+                    const d = { 38: [0,1], 39: [1,0], 40: [0,-1], 37: [-1,0] }[e.keyCode]
+                    offset = [d[0] * 0.0002, d[1] * 0.0002]
+                })
+                window.addEventListener('keyup', e => {
+                    const newLon = Number(parseFloat(lon) + offset[0]).toFixed(6)
+                    const newLat = Number(parseFloat(lat) + offset[1]).toFixed(6)
+
+                    lat = newLat
+                    lon = newLon
+                    latEl.value = newLat
+                    lonEl.value = newLon
+
+                    send(newLon, newLat)
+                })
+
+                function send(nLon, nLat){
+                  fetch(`/gps/lon/${nLon}/lat/${nLat}`)
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -8,18 +8,26 @@
     </head>
     <body>
         <div>
-            <label for="latitude">latitude</label>
-            <input type="text" id="latitude" />
+            <label for="">lon and lat:</label>
+            <input id="ipt1" type="text">
+            <button id="btnParse">parse</button>
         </div>
         <div>
             <label for="longitude">longitude</label>
             <input type="text" id="longitude" />
         </div>
+        <div>
+            <label for="latitude">latitude</label>
+            <input type="text" id="latitude" />
+        </div>
+        <button id="go">go to position</button>
+        <button id="btn1">set 星惠佳苑</button>
         <script>
             window.onload = () => {
                 let controlLock = true
                 const latEl = document.getElementById('latitude')
                 const lonEl = document.getElementById('longitude')
+                const goEl = document.getElementById('go')
                 let lat = 0
                 let lon = 0
                 let offset = []
@@ -32,26 +40,56 @@
                     latEl.value = lat
                     lonEl.value = lon
                 }
-                navigator.geolocation.getCurrentPosition(this.showPosition)
+                navigator.geolocation.getCurrentPosition(this.showPosition, function(err) {
+                    console.log(err)
+                })
 
                 window.addEventListener('keydown', e => {
-                    const d = { 38: [0,1], 39: [1,0], 40: [0,-1], 37: [-1,0] }[e.keyCode]
-                    offset = [d[0] * 0.0002, d[1] * 0.0002]
+                    const d = { 38: [0, 1], 39: [1, 0], 40: [0, -1], 37: [-1, 0] }[e.keyCode]
+                    if (d) {
+                        offset = [d[0] * 0.0002, d[1] * 0.0002]
+                    }
                 })
                 window.addEventListener('keyup', e => {
-                    const newLon = Number(parseFloat(lon) + offset[0]).toFixed(6)
-                    const newLat = Number(parseFloat(lat) + offset[1]).toFixed(6)
+                    if (e.keyCode >= 37 && e.keyCode <= 40) {
+                        const newLon = Number(parseFloat(lon) + offset[0]).toFixed(6)
+                        const newLat = Number(parseFloat(lat) + offset[1]).toFixed(6)
 
-                    lat = newLat
-                    lon = newLon
-                    latEl.value = newLat
-                    lonEl.value = newLon
+                        lat = newLat
+                        lon = newLon
+                        latEl.value = newLat
+                        lonEl.value = newLon
 
-                    send(newLon, newLat)
+                        send(newLon, newLat)
+                    }
                 })
 
-                function send(nLon, nLat){
-                  fetch(`/gps/lon/${nLon}/lat/${nLat}`)
+                function send(nLon, nLat) {
+                    fetch(`/gps/lon/${nLon}/lat/${nLat}`)
+                }
+
+                goEl.addEventListener(
+                    'click',
+                    function() {
+                        lon = parseFloat(lonEl.value).toFixed(6)
+                        lat = parseFloat(latEl.value).toFixed(6)
+                        console.log(lon, lat);
+                        send(lon, lat)
+                    },
+                    false
+                )
+
+                btn1.onclick = () => {
+                    lonEl.value = 121.510633;
+                    latEl.value = 31.277508;
+                }
+
+                btnParse.onclick = () => {
+                    const vs = ipt1.value && ipt1.value.split(',')
+                    if (vs.length === 2) {
+                        lonEl.value = vs[0]
+                        latEl.value = vs[1]
+                    }
                 }
             }
         </script>

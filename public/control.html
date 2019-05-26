@@ -33,8 +33,8 @@
                 let offset = []
 
                 showPosition = position => {
-                    lat = Number(position.coords.latitude).toFixed(6)
-                    lon = Number(position.coords.longitude).toFixed(6)
+                    lat = Number(position.coords.latitude).toFixed(10)
+                    lon = Number(position.coords.longitude).toFixed(10)
                     console.log('纬度:' + lat + ',经度:' + lon)
 
                     latEl.value = lat
@@ -52,8 +52,8 @@
                 })
                 window.addEventListener('keyup', e => {
                     if (e.keyCode >= 37 && e.keyCode <= 40) {
-                        const newLon = Number(parseFloat(lon) + offset[0]).toFixed(6)
-                        const newLat = Number(parseFloat(lat) + offset[1]).toFixed(6)
+                        const newLon = Number(parseFloat(lon) + offset[0]).toFixed(10)
+                        const newLat = Number(parseFloat(lat) + offset[1]).toFixed(10)
 
                         lat = newLat
                         lon = newLon
@@ -65,14 +65,18 @@
                 })
 
                 function send(nLon, nLat) {
-                    fetch(`/gps/lon/${nLon}/lat/${nLat}`)
+                    const ost = [-0.0044, 0.0024]
+                    const nnLon = parseFloat(nLon) + ost[0]
+                    const nnLat = parseFloat(nLat) + ost[1]
+
+                    fetch(`/gps/lon/${nnLon}/lat/${nnLat}`)
                 }
 
                 goEl.addEventListener(
                     'click',
                     function() {
-                        lon = parseFloat(lonEl.value).toFixed(6)
-                        lat = parseFloat(latEl.value).toFixed(6)
+                        lon = parseFloat(lonEl.value).toFixed(10)
+                        lat = parseFloat(latEl.value).toFixed(10)
                         console.log(lon, lat);
                         send(lon, lat)
                     },
@@ -87,8 +91,8 @@
                 btnParse.onclick = () => {
                     const vs = ipt1.value && ipt1.value.split(',')
                     if (vs.length === 2) {
-                        lonEl.value = vs[0]
-                        latEl.value = vs[1]
+                        lonEl.value = vs[1]
+                        latEl.value = vs[0]
                     }
                 }
             }

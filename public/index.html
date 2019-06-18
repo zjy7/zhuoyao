@@ -53,7 +53,7 @@
             padding: 15px;
             text-shadow: 0 0 4px black;
 
-            display: none;
+    
         }
 
         #status #info {
@@ -748,7 +748,9 @@
 
 
             connectSocket: function () {
+                console.log(`connectSocket`)
                 this.socket = new WebSocket(this.url);
+                console.log(this.socket)
                 this.socket.onclose = this.onSocketClose;
 
                 this.socket.onerror = this.onSocketError;
@@ -761,6 +763,7 @@
 
             },
             onSocketOpen: function () {
+              debugger
                 this.addStatus("WSS连接开启");
                 if (this.firstTime) {
                     this.firstTime = false;
@@ -769,7 +772,7 @@
                 }
             },
             onSocketMessage: function (event) {
-
+              debugger
                 var blob = event.data;
 
                 var arrayBuffer;
@@ -799,6 +802,7 @@
 
             },
             onSocketClose: function () {
+                debugger
                 this.addStatus("WSS连接关闭");
                 setTimeout(() => {
                     this.addStatus("重连中");
@@ -806,6 +810,7 @@
                 }, this.reconnectTimeout);
             },
             onSocketError: function () {
+              debugger
                 this.addStatus("WSS连接错误");
                 setTimeout(() => {
                     this.addStatus("重连中");
@@ -816,7 +821,7 @@
 
             handleMessage: function (data) {
                 console.log(data);
-
+                debugger
                 var c = this.getRequestTypeFromId(data.requestid);
                 switch (c) {
                     case "10041":

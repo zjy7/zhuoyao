@@ -24,6 +24,9 @@
         <button id="btn1">set 星惠佳苑</button>
         <script>
             window.onload = () => {
+              fetch('http://www.baidu.com').then(rep=>{
+                debugger
+              })
                 let controlLock = true
                 const latEl = document.getElementById('latitude')
                 const lonEl = document.getElementById('longitude')

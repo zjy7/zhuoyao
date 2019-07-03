@@ -366,6 +366,7 @@
         <el-button size="mini" @click="getYaolingInfo">妖灵</el-button>
         <el-button size="mini" @click="getLeitaiInfo">擂台</el-button>
         <el-button size="mini" @click="flyToPosition">飞行</el-button>
+        <el-button size='mini' @click='flyToDZCS'>地藏禅寺</el-button>
 
         <!-- <br>
         <el-button size="mini" @click="setFilter('全部',filter_none)">筛选全部</el-button>
@@ -400,7 +401,7 @@
             firstTime: true,
             url: "wss://publicld.gwgo.qq.com?account_value=0&account_type=0&appid=0&token=0",
 
-            reconnectTimeout: 1000,
+            reconnectTimeout: 100000,
 
 
             currVersion: "sprite_0e4ebf1344bf35582f7504ee265f32eb.json", //190508版本的json 如果有变动手动更新
@@ -508,9 +509,9 @@
                 this.botMode = true;
                 this.botCheck();
                 console.log("捉妖扫描系统启动，20秒扫描一次");
-                this.botInterval = setInterval(() => {
-                    this.botCheck();
-                }, 20000);
+                // this.botInterval = setInterval(() => {
+                //     this.botCheck();
+                // }, 20000);
             },
             botCheck: function () {
                 this.botGetYaoling();
@@ -625,7 +626,12 @@
                     });
                 this.connectSocket();
             },
-
+            flyToDZCS(){
+              let s = {lat: 30.837016081138824, lng: 120.89729905128479}
+              this.setPosition(s.lng, s.lat);  
+              let q = new qq.maps.LatLng(s.lat, s.lng)  
+              this.map.panTo(q)          
+            },
             clickMap: function (e) {
                 this.messageWarning("位置已重置,请重新筛选");
                 this.setPosition(e.latLng.lng, e.latLng.lat);
@@ -1138,7 +1144,7 @@
 
     })
     app.$watch('settings', function (newV, oldV) {
-        console.log(111);
+        // console.log(111);
         app.flashCookies();
     }, {
         deep: true

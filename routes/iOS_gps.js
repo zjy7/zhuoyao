@@ -4,8 +4,8 @@ const {exec} = require('child_process');
 
 var router = express.Router();
 
-let gpx_file_position = '/Users/jearbilove/workspace/xcode/zy/Location.gpx';
-let apple_script_position = '/Users/jearbilove/workspace/xcode/zy/apple_script/xcode_simulation';
+let gpx_file_position = '/Users/bale/code/zhuoyao/zhuoyao/Location.gpx';
+let apple_script_position = '/Users/bale/code/zhuoyao/zhuoyao/zhuoyao/apple_script/xcode_simulation';
 
 /* GET users listing. */
 router.get('/lon/:lon/lat/:lat', function (req, res, next) {

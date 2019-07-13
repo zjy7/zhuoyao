@@ -22,7 +22,6 @@
     <script src="assets/jquery.min.js"></script>
     <script src="assets/lodash.min.js"></script>
     <script src="tempdata.js"></script>
-
     <style>
         html,
         body {
@@ -246,9 +245,7 @@
             z-index: 99999;
         }
     </style>
-
 </head>
-
 <body>
 <div id="app">
     <div class="burger-wrap">
@@ -333,19 +330,12 @@
             </div>
         </div>
     </transition>
-    <div id="status">
-        <div id="info">
-
-            <br><span v-html="status"></span>
-        </div>
-    </div>
     <div id="buttons">
         <el-button size="mini" @click="openMenu">菜单</el-button>
         <el-button size="mini" @click="getYaolingInfo">妖灵</el-button>
         <el-button size="mini" @click="getLeitaiInfo">擂台</el-button>
         <el-button size="mini" @click="flyToPosition">飞行</el-button>
         <el-button size='mini' @click='flyToDZCS'>地藏禅寺</el-button>
-
     </div>
     <div id="qmap"></div>
 </div>
@@ -373,11 +363,11 @@
 
             currVersion: "sprite_0e4ebf1344bf35582f7504ee265f32eb.json", //190508版本的json 如果有变动手动更新
             version: "v0.7.510.2157",
-            location: {
-                longitude: 120.11328974344576,
-                latitude: 30.28110036590626,
-            },
-
+            // location: {
+            //     longitude: 120.11328974344576,
+            //     latitude: 30.28110036590626,
+            // },
+            location:{latitude: 30.837016081138824, longitude: 120.89729905128479},
             statusOK: false,
             yaolings: {},
 
@@ -550,10 +540,10 @@
 
 
             getCookies: function () {
-
-                if (typeof (Cookies.get("radar_settings")) != "undefined") {
-                    this.settings = Cookies.getJSON("radar_settings");
-                }
+              debugger
+              if (typeof (Cookies.get("radar_settings")) != "undefined") {
+                  this.settings = Cookies.getJSON("radar_settings");
+              }
 
             },
             flashCookies: function () {
@@ -834,11 +824,12 @@
                         if (mode == 1) {
                             // 妖灵
                             if (this.fit.length == 1 && this.fit[0] == "special") {
-
+                            // 全部妖灵
                             } else {
                                 if ($.inArray(ti.sprite_id, this.fit) == -1) continue;
                             }
-                        } else if (mode == 2) {
+                        } 
+                        else if (mode == 2) {
                             // 擂台
 
                         }
@@ -855,6 +846,7 @@
                         this.markers.push(marker);
                     }
                 }
+
                 this.notify("筛选成功!");
             },
 
@@ -1077,7 +1069,7 @@
         },
         computed: {
             fit: function () {
-
+                debugger
                 var ans = [];
                 if (this.settings.fit.all) {
                     ans = ["special"];
@@ -1091,7 +1083,8 @@
                 if (this.settings.fit.rare) ans = _.union(ans, this.filter_rare);
                 if (this.settings.fit.feature) ans = _.union(ans, this.filter_feature);
                 if (this.settings.fit.element) ans = _.union(ans, this.filter_element);
-
+                console.log(`aaannnsss`)
+                console.log(ans)
                 return ans;
             }
         },

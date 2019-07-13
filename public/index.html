@@ -40,28 +40,6 @@
             width: 100%;
             height: 100%;
         }
-
-        #status {
-            position: absolute;
-            color: white;
-            z-index: 49;
-            bottom: 0;
-            left: 0;
-            height: 200px;
-            max-width: 500px;
-            background-color: rgba(0, 0, 0, .5);
-            padding: 15px;
-            text-shadow: 0 0 4px black;
-
-    
-        }
-
-        #status #info {
-            height: 90%;
-            overflow-y: scroll;
-
-        }
-
         #buttons {
             position: absolute;
             z-index: 50;
@@ -381,7 +359,6 @@
     var app = new Vue({
         el: '#app',
         data: {
-            status: "",
             socket: {},
             apikey: "2LWBZ-FEQK6-KKYS2-M6WR4-PFGS5-RZBP3",
             map: {},
@@ -464,13 +441,12 @@
 
             this.current_filter = this.filter_none;
 
-            this.addStatus("捉妖雷达Web版");
-            this.addStatus("版本:" + this.version);
-            this.addStatus("更新日志:");
-            this.addStatus("加入qq机器人功能");
-            this.addStatus("点击地图自动筛选功能");
-            this.addStatus("");
-            //this.addStatus("开发者:ZachXia,Vitech");
+            console.log("捉妖雷达Web版");
+            console.log("版本:" + this.version);
+            console.log("更新日志:");
+            console.log("加入qq机器人功能");
+            console.log("点击地图自动筛选功能");
+            console.log("");
 
             setTimeout(() => {
                 //this.notify("提示:点击右下角菜单开始筛选！");
@@ -582,9 +558,6 @@
             },
             flashCookies: function () {
                 Cookies.set("radar_settings", this.settings);
-            },
-            debug: function () {
-                $("#status").toggle();
             },
             init: function () {
                 this.map = new qq.maps.Map(document.getElementById("qmap"), {
@@ -760,7 +733,7 @@
             },
             onSocketOpen: function () {
               debugger
-                this.addStatus("WSS连接开启");
+                console.log("WSS连接开启");
                 if (this.firstTime) {
                     this.firstTime = false;
                     this.getSettingFileName();
@@ -776,7 +749,6 @@
 
                 if (typeof (blob) === "string") {
                     //ans = blob;
-                    //this.addStatusWithoutNewline("WSS连接信息：");
                     //this.addStatus(ans);
                 } else {
 
@@ -784,8 +756,6 @@
                     fileReader.onload = e => {
                         arrayBuffer = e.target.result;
                         var n = this.utf8ByteToUnicodeStr(new Uint8Array(arrayBuffer).slice(4));
-                        //this.addStatusWithoutNewline("WSS连接信息：");
-                        //this.addStatus(n);
 
                         var data = JSON.parse(n);
 
@@ -799,17 +769,17 @@
             },
             onSocketClose: function () {
                 debugger
-                this.addStatus("WSS连接关闭");
+                console.log("WSS连接关闭");
                 setTimeout(() => {
-                    this.addStatus("重连中");
+                    console.log("重连中");
                     this.connectSocket();
                 }, this.reconnectTimeout);
             },
             onSocketError: function () {
               debugger
-                this.addStatus("WSS连接错误");
+                console.log("WSS连接错误");
                 setTimeout(() => {
-                    this.addStatus("重连中");
+                    console.log("重连中");
                     this.connectSocket();
                 }, this.reconnectTimeout);
             },
@@ -927,7 +897,7 @@
 
             setFilter: function (str, f) {
                 this.current_filter = f;
-                this.addStatus("已修改筛选规则：" + str);
+                console.log("已修改筛选规则：" + str);
             },
 
             //消息通知
@@ -962,16 +932,10 @@
                 var s = new Uint8Array(4 + t);
                 return s.set(new Uint8Array(o), 0), s.set(r, 4), s.buffer;
             },
-            addStatusWithoutNewline: function (str) {
-                this.status += str;
-            },
-            addStatus: function (str) {
-                this.status += str + "<br>";
-            },
             sendMessage: function (message, requestIndex) {
                 if (message.request_type != "1004") {
-                    this.addStatusWithoutNewline("WSS发送消息：");
-                    this.addStatus(JSON.stringify(message));
+                    console.log("WSS发送消息：");
+                    console.log(JSON.stringify(message));
                 }
                 this.socket.send(this.json2buffer(message));
             },
